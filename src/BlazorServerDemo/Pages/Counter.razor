@@ -1,39 +1,30 @@
 ﻿@page "/counter"
 
-<PageTitle>Counthhher</PageTitle>
+<PageTitle>Counter</PageTitle>
 
 <h1>Counter</h1>
 
 <p role="status">Current count: @currentCount</p>
 
-@if (DisplayCharlotte)
-{
-    <p>I love you Daddy!</p>
-}
-@if (DisplayDaddy)
-{
-    <p>Hello beautiful Daddy!!</p>
-}
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me Charlotte</button>
+<MyFirstComponent @bind-CurrentCounterValue=@currentCount />
 
-<button class="btn btn-primary" @onclick="DaddyClick">Click me Daddy</button>
+
+
+
 
 @code {
+
+    [Parameter]
+    public EventCallback<int> OnMultipleOfThree { get; set; }
+
     private int currentCount = 0;
 
-    private void IncrementCount()
+    private async Task IncrementCount()
     {
         currentCount++;
-        DisplayCharlotte = !DisplayCharlotte;
+        if (currentCount % 3 == 0)
+            await OnMultipleOfThree.InvokeAsync(currentCount);
     }
-
-    private void DaddyClick()
-    {
-        DisplayDaddy = !DisplayDaddy;
-    }
-
-    private bool DisplayCharlotte { get; set; }
-
-    private bool DisplayDaddy { get; set; }
 }
